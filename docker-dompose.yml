@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  app:
+    tty: true
+    restart: always
+    container_name: app
+    build:
+      context: .
+      dockerfile: ./dockerfile
+
+    ports:
+      -"3000:3000"
+      -"50000:50000"
+    
+    depends_on:
+      -mariadb
+
+  mariadb:
+    restart: always
+    container_name: "mariadb"
+    image: mariadb
+    ports:
+      - 3306:3306
+    environment:
+      MARIADB_DATABASE: `${DB_DATABASE}`
+      MARIADB_USER: `${DB_USER}`
+      MARIADB_PASSWORD: `${DB_PASS}`
+      MARIADB_ROOT_PASSWORD: `${DB_PASS}`
+      
+
+
+
+
+  
