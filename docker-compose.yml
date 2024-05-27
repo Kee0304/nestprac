@@ -21,15 +21,9 @@ services:
     container_name: "mariadb"
     image: mariadb
     ports:
-      - 3306:3306
+      -"3306:3306"
     environment:
       MARIADB_DATABASE: `${DB_DATABASE}`
       MARIADB_USER: `${DB_USER}`
       MARIADB_PASSWORD: `${DB_PASS}`
       MARIADB_ROOT_PASSWORD: `${DB_PASS}`
-      
-
-
-
-
-  
