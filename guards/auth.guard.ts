@@ -41,7 +41,6 @@
                 }
                 return this.jwtService.verify(accessToken, {secret:accessKey})
             } catch(e) {
-                // console.log(e.message)
                 switch(e.message) {
                     case "Cannot read properties of null (reading 'userUid')" || "유효한 접근이 아닙니다." :
                         throw new HttpException("유효한 접근이 아닙니다.", 401)

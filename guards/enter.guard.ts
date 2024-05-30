@@ -18,11 +18,12 @@ export class EnterGuard implements CanActivate {
     async validRequest(request:any) {
         const accessKey = process.env.SECRET_FOR_ACCESS_TOKEN
         try {
-            const cookies:string[] = request.cookies
-            if (!cookies) {
+            const cookies:string[] = await request.cookies
+            if (Object.keys(cookies).length ===0) {
                 throw new HttpException("로그인되지 않았습니다.", 401)
             }
             const accessToken:string = cookies["access_token"]
+            
             const userUid:number = this.jwtService.decode(accessToken).userUid
             const isUser:boolean = await this.validUser(userUid, request)
             if (!isUser) {
@@ -30,8 +31,9 @@ export class EnterGuard implements CanActivate {
             }
             return this.jwtService.verify(accessToken, {secret:accessKey})
         } catch(e) {
+            console.log(e.message)
             switch(e.message) {
-                case "jwt expired"||"로그인되지 않았습니다.":
+                case "jwt expired"||"로그인되지 않았습니다."||"Cannot read properties of null (reading 'userUid')":
                     throw new HttpException("로그인이 필요합니다.", 401)
                 
                 default:
@@ -43,6 +45,7 @@ export class EnterGuard implements CanActivate {
     // 유효한 사용자인지 검증
     async validUser(userUid:number, request:any) {
         const user:UserEntity|null = await this.userService.getUser(userUid)
+        console.log(`user = ${user}`)
         if (user) {
             return true
         } else {

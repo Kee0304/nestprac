@@ -3,8 +3,9 @@ import { Body, Controller, Get, HttpException, Post, Req, Res, UnauthorizedExcep
 import { UserService } from './user.service';
 import { SignInDto, SignInResponseDTO, SignInToken, SignUpDto } from './dto/user.dto';
 import { EnterGuard } from 'guards/enter.guard';
+import { STATUS_CODES } from 'http';
 
-@Controller('/user')
+@Controller('/auth')
 export class UserController {
     constructor (
         private readonly userService: UserService
@@ -24,6 +25,7 @@ export class UserController {
         if (signInRes instanceof SignInToken) {
             const refreshToken = signInRes.refreshToken 
             const accessToken = signInRes.accessToken
+            console.log(refreshToken, accessToken)
             response.cookie('access_token', accessToken, {
                 httpOnly: true
             });
@@ -34,6 +36,32 @@ export class UserController {
             return new SignInResponseDTO("성공적으로 로그인 되었습니다.")
         }
         return response
+    }
+
+    @Post('/logout')
+    async logOut(
+        @Res() response:Response
+    ) {
+        response.cookie(
+            'access_token',
+            '',
+            {
+                maxAge: 0
+            }
+        )
+
+        response.cookie(
+            'refresh_token',
+            '',
+            {
+                maxAge: 0
+            }
+        )
+
+        return response.send({
+            message:"로그아웃 완료",
+            STATUS_CODES:200
+        })
     }
 
     @Get('/refresh')
@@ -55,9 +83,19 @@ export class UserController {
 
     @UseGuards(EnterGuard)
     @Get()
-    async isUser() {
-        return {
-            message: "True"
+    async isUser(
+        @Req() request: Request
+    ) {
+        if (request["valid"] === false) {
+            return {
+                message: "로그인이 필요합니다.",
+                statusCode: 401
+            }
+        } else {
+            return {
+                message: "로그인 상태입니다.",
+                statusCode: 200
+            }
         }
     }
 }
