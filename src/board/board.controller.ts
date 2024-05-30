@@ -2,7 +2,7 @@ import { Controller, Delete, Get, Param, Post, Put, Req, UseGuards } from '@nest
 import { BoardService } from './board.service';
 import { ArticlePostResponseDTO, ArticleUpdateDTO } from './dto/article.dto';
 import { Request } from 'express';
-import { AuthGuard } from 'src/app.guard';
+import { AuthGuard } from '../../guards/auth.guard';
 
 @Controller('board')
 export class BoardController {

@@ -18,7 +18,7 @@ async function bootstrap() {
     )
   )
   app.enableCors({
-    origin: ['http://localhost:8000', "*"],
+    origin: ['https://nextboard-eight.vercel.app/', '*'],
     credentials: true
   })
   app.use(cookieParser());

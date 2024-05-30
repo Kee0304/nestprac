@@ -82,10 +82,10 @@ export class UserService {
         }
     }
 
-    // 
-    async refreshToken(request: Request) {
+    // 토큰 갱신
+    async refreshToken(request: any) {
         try {
-            const cookies:string[] = request.cookies.split('; ')
+            const cookies:string[] = request.cookies;
             let refreshToken = null;
             for (let i=0; i++; i<=cookies.length-1) {
                 if (cookies[i].includes("refresh_token")) {

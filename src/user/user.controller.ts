@@ -1,7 +1,8 @@
 import { Response, Request } from 'express';
-import { Body, Controller, Get, HttpException, Post, Req, Res, UnauthorizedException } from '@nestjs/common';
+import { Body, Controller, Get, HttpException, Post, Req, Res, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { SignInDto, SignInResponseDTO, SignInToken, SignUpDto } from './dto/user.dto';
+import { EnterGuard } from 'guards/enter.guard';
 
 @Controller('/user')
 export class UserController {
@@ -49,6 +50,14 @@ export class UserController {
             return new Response()
         } else {
             return response
+        }
+    }
+
+    @UseGuards(EnterGuard)
+    @Get()
+    async isUser() {
+        return {
+            message: "True"
         }
     }
 }
