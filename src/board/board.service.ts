@@ -21,6 +21,7 @@ export class BoardService {
             },
             relations: ["user"]
         });
+        console.log(articles)
         const response:ArticleGetResponseDTO[] = articles.map(
             (article) => {
                 return new ArticleGetResponseDTO(
@@ -50,6 +51,7 @@ export class BoardService {
     }
 
     async postArticle(data: ArticlePostDto) {
+        console.log(data)
         const user = await this.userRepo.findOne(
             {
                 where: {

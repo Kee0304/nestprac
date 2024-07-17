@@ -3,7 +3,6 @@ import { Body, Controller, Get, HttpException, Post, Req, Res, UnauthorizedExcep
 import { UserService } from './user.service';
 import { SignInDto, SignInResponseDTO, SignInToken, SignUpDto } from './dto/user.dto';
 import { EnterGuard } from 'guards/enter.guard';
-import { STATUS_CODES } from 'http';
 
 @Controller('/auth')
 export class UserController {
@@ -25,17 +24,16 @@ export class UserController {
         if (signInRes instanceof SignInToken) {
             const refreshToken = signInRes.refreshToken 
             const accessToken = signInRes.accessToken
-            console.log(refreshToken, accessToken)
             response.cookie('access_token', accessToken, {
-                httpOnly: true
+                httpOnly: true,
             });
             response.cookie('refresh_token', refreshToken, {
-                httpOnly: true
+                httpOnly: true,
             })
             response.statusCode = 200
             return new SignInResponseDTO("성공적으로 로그인 되었습니다.")
         }
-        return response
+        return new HttpException("아이디 비밀번호를 확인해주세요", 400)
     }
 
     @Post('/logout')
@@ -64,20 +62,20 @@ export class UserController {
         })
     }
 
-    @Get('/refresh')
+    @Post('/refresh')
     async refreshToken(
         @Req() request: Request,
         @Res({passthrough: true}) response: Response
     ) {
         const refreshRes:SignInToken|HttpException = await this.userService.refreshToken(request);
-        if (refreshRes instanceof SignInDto) {
+        if (!(refreshRes instanceof HttpException)) {
             const accessToken = refreshRes.accessToken
             response.cookie('access_token', accessToken, {
                 httpOnly: true
             });
-            return new Response()
+            return JSON.stringify({message:"성공",status: "200"})
         } else {
-            return response
+            return new HttpException("실패", 401)
         }
     }
 

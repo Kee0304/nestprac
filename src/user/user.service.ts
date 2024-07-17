@@ -86,13 +86,7 @@ export class UserService {
     async refreshToken(request: any) {
         try {
             const cookies:string[] = request.cookies;
-            let refreshToken = null;
-            for (let i=0; i++; i<=cookies.length-1) {
-                if (cookies[i].includes("refresh_token")) {
-                    refreshToken = cookies[i].replace("refresh_token=","")
-                    break
-                }
-            };
+            const refreshToken:string = cookies['refresh_token']
 
             const decoded = this.jwtService.decode(refreshToken);
             const userUid = decoded.userUid
@@ -137,7 +131,7 @@ export class UserService {
             },
             {
                 secret: process.env.SECRET_FOR_ACCESS_TOKEN,
-                expiresIn: '3m'
+                expiresIn: '1m'
             }
         )
     }

@@ -4,7 +4,7 @@ import { ArticlePostResponseDTO, ArticleUpdateDTO } from './dto/article.dto';
 import { Request } from 'express';
 import { AuthGuard } from '../../guards/auth.guard';
 
-@Controller('board')
+@Controller('/board')
 export class BoardController {
     constructor(
         private readonly boardService:BoardService
@@ -27,6 +27,7 @@ export class BoardController {
     async postArticle(
         @Req() request: Request
     ) {
+        console.log(request.body)
         const result = await this.boardService.postArticle(request.body);
         const response = new ArticlePostResponseDTO(result.postUid);
         return response

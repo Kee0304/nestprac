@@ -26,7 +26,12 @@
                 const isUser:boolean = await this.validUser(userUid, request)
                 if (!isUser) {
                     throw new HttpException("유효한 접근이 아닙니다.", 401)
+                } else {
+                    if (request.method === "POST" || request.method === "PUT" || request.method ==="DELETE") {
+                        request.body.userUid = userUid;
+                    }
                 }
+                
                 if (request.method === "PUT" || request.method ==="DELETE") {
                     const url:string[] = request.originalUrl.split("/")
                     if (url[1] === 'board') {
@@ -49,10 +54,10 @@
                         throw new HttpException("토큰이 만료되었습니다.", 441)
 
                     case "권한이 존재하지 않습니다.":
-                        throw new HttpException(e.message, 401)
+                        throw new HttpException("권한이 존재하지 않습니다.", 401)
                     
                     case "리소스를 찾지 못했습니다.":
-                        throw new HttpException(e.message, 404)
+                        throw new HttpException("리소스를 찾지 못했습니다.", 404)
                     
                     default:
                         throw new HttpException('처리 중에 문제가 발생했습니다. 잠시 후 다시 시도해주세요.', 500);

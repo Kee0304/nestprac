@@ -47,8 +47,8 @@ export class SignInToken {
 
 export class SignInResponseDTO {
     constructor(message:string) {
-        this.data = {}
-        this.data.message = message
+        this.message = message
     }
-    data:any
+    message:string;
+    statusCode:number = 201;
 }

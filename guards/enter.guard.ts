@@ -31,7 +31,6 @@ export class EnterGuard implements CanActivate {
             }
             return this.jwtService.verify(accessToken, {secret:accessKey})
         } catch(e) {
-            console.log(e.message)
             switch(e.message) {
                 case "jwt expired"||"로그인되지 않았습니다."||"Cannot read properties of null (reading 'userUid')":
                     throw new HttpException("로그인이 필요합니다.", 401)
@@ -45,7 +44,6 @@ export class EnterGuard implements CanActivate {
     // 유효한 사용자인지 검증
     async validUser(userUid:number, request:any) {
         const user:UserEntity|null = await this.userService.getUser(userUid)
-        console.log(`user = ${user}`)
         if (user) {
             return true
         } else {
