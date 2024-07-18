@@ -18,7 +18,7 @@ async function bootstrap() {
     )
   )
   app.enableCors({
-    origin: ["https://nsk.vercel.app", "http://localhost:8000", "http://127.0.0.1:8000"],
+    origin: ["https://nsk.vercel.app", "http://localhost:8000", "http://127.0.0.1:8000", "https://woorifisa-service-dev-3rd.github.io/frontend-1st-HHN/"],
     credentials: true
   })
   app.use(cookieParser());
